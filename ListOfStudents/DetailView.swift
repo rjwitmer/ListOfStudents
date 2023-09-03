@@ -9,23 +9,43 @@ import SwiftUI
 
 struct DetailView: View {
     @EnvironmentObject var studentVM: StudentViewModel
+    @Environment(\.dismiss) private var dismiss
     @State var student: Student
     var body: some View {
-        VStack (alignment: .leading) {
-            Text("Developer's Name")
-                .bold()
-            TextField("Student Name:", text: $student.name)
-                .textFieldStyle(.roundedBorder)
-            Spacer()
+        NavigationStack {
+            VStack (alignment: .leading) {
+                Text("Developer's Name:")
+                    .bold()
+                TextField("Student Name:", text: $student.name)
+                    .textFieldStyle(.roundedBorder)
+                Spacer()
+            }
+            .font(.title)
+            .padding()
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Save") {
+                        studentVM.saveStudent(student: student)
+                        dismiss()
+                    }
+                }
+            }
         }
-        .font(.title)
-        .padding()
     }
 }
 
 struct DetailView_Previews: PreviewProvider {
     static var previews: some View {
-        DetailView(student: Student(name: "Swifty McSwiftFace"))
-            .environmentObject(StudentViewModel())
+        NavigationStack {
+            DetailView(student: Student(name: "Swifty McSwiftFace"))
+                .environmentObject(StudentViewModel())
+        }
     }
 }

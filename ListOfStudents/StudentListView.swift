@@ -10,6 +10,7 @@ import SwiftUI
 struct StudentListView: View {
     
     @EnvironmentObject var studentVM: StudentViewModel
+    @State private var isSheetPresented = false
     
     var body: some View {
         NavigationStack {
@@ -24,10 +25,27 @@ struct StudentListView: View {
                     }
                     .font(.title2)
                 }
+                .onDelete(perform: studentVM.deleteStudent)
                 
             }
             .listStyle(.plain)
             .navigationTitle("Swifters!")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    EditButton()
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        isSheetPresented.toggle()
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+
+                }
+            }
+            .sheet(isPresented: $isSheetPresented) {
+                DetailView(student: Student())
+            }
         }
     }
 }

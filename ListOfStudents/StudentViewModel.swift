@@ -64,4 +64,21 @@ class StudentViewModel: ObservableObject {
             studentArray.append(Student(id: UUID().uuidString, name: student))
         }
     }
+    
+    func saveStudent(student: Student) {
+        if student.id == nil {  // New student
+            var newStudent = student
+            newStudent.id = UUID().uuidString
+            studentArray.append(newStudent)
+        } else {    // Update existing student
+            if let index = studentArray.firstIndex(where: {$0.id == student.id}) {
+                studentArray[index] = student
+            }
+        }
+
+    }
+    
+    func deleteStudent(indexSet: IndexSet) {
+        studentArray.remove(atOffsets: indexSet)
+    }
 }
