@@ -11,6 +11,7 @@ struct DetailView: View {
     @EnvironmentObject var studentVM: StudentViewModel
     @Environment(\.dismiss) private var dismiss
     @State var student: Student
+
     var body: some View {
         NavigationStack {
             VStack (alignment: .leading) {
@@ -18,6 +19,25 @@ struct DetailView: View {
                     .bold()
                 TextField("Student Name:", text: $student.name)
                     .textFieldStyle(.roundedBorder)
+                Text("Major:")
+                    .bold()
+                TextField("major:", text: $student.major)
+                    .textFieldStyle(.roundedBorder)
+                Text("Hometown:")
+                    .bold()
+                TextField("hometown:", text: $student.homeTown)
+                    .textFieldStyle(.roundedBorder)
+                HStack {
+                    Text("Year:")
+                        .bold()
+                    Spacer()
+                    Picker("Year:", selection: $student.year) {
+                        ForEach(Year.allCases, id:\.self) { year in
+                            Text(year.rawValue.capitalized)
+                        }
+                    }
+                }
+                
                 Spacer()
             }
             .font(.title)
@@ -44,7 +64,7 @@ struct DetailView: View {
 struct DetailView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            DetailView(student: Student(name: "Swifty McSwiftFace"))
+            DetailView(student: Student(name: "Prof. Gallagher", major: "Computer Science (MCAS)", homeTown: "Wayne, NJ", year: .senior))
                 .environmentObject(StudentViewModel())
         }
     }
